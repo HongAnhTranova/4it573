@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Hadej cislo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f0f0;
+    }
+    .game {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    input {
+      padding: 8px;
+      font-size: 18px;
+      width: 80px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 8px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background: #4a90d9;
+      color: white;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+    button:hover {
+      background: #357abd;
+    }
+    #message {
+      margin-top: 15px;
+      font-size: 16px;
+      min-height: 24px;
+    }
+    #attempts {
+      color: #888;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>Hadej cislo</h1>
+    <p>Myslim si cislo mezi 0 a 10</p>
+    <div>
+      <input type="number" id="guess" min="0" max="10" placeholder="?">
+      <button onclick="makeGuess()">Hadej</button>
+    </div>
+    <p id="message"></p>
+    <p id="attempts"></p>
+  </div>
+
+  <script>
+    var number = Math.floor(Math.random() * 11);
+    var maxAttempts = 5;
+    var currentAttempt = 0;
+    var gameOver = false;
+
+    document.getElementById("attempts").textContent = "Zbyvajici pokusy: " + maxAttempts;
+
+    document.getElementById("guess").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") makeGuess();
+    });
+
+    function makeGuess() {
+      if (gameOver) return;
+
+      var input = document.getElementById("guess");
+      var guess = Number(input.value);
+      var msg = document.getElementById("message");
+
+      if (input.value === "" || guess < 0 || guess > 10) {
+        msg.textContent = "Zadej cislo od 0 do 10!";
+        return;
+      }
+
+      currentAttempt++;
+      var remaining = maxAttempts - currentAttempt;
+
+      if (guess === number) {
+        msg.textContent = "Spravne! Cislo bylo " + number + " 🎉";
+        msg.style.color = "green";
+        gameOver = true;
+      } else if (currentAttempt >= maxAttempts) {
+        msg.textContent = "Prohrals! Cislo bylo " + number;
+        msg.style.color = "red";
+        gameOver = true;
+      } else if (guess > number) {
+        msg.textContent = "Moc vysoko, zkus nizsi cislo.";
+        msg.style.color = "#c0392b";
+      } else {
+        msg.textContent = "Moc nizko, zkus vyssi cislo.";
+        msg.style.color = "#c0392b";
+      }
+
+      document.getElementById("attempts").textContent = gameOver ? "" : "Zbyvajici pokusy: " + remaining;
+      input.value = "";
+      input.focus();
+    }
+  </script>
+</body>
+</html>
