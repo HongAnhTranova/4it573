@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Todo</title>
+  </head>
+  <body>
+    <h1>Todo seznam</h1>
+
+    <form action="/add" method="POST">
+      <input type="text" name="title" placeholder="Novy ukol" required />
+      <button type="submit">Pridat</button>
+    </form>
+
+    <ul>
+      <% todos.forEach(function (todo) { %>
+        <li>
+          <a href="/todo/<%= todo.id %>">
+            <%= todo.title %>
+          </a>
+          <%= todo.done ? "(hotovo)" : "(nehotovo)" %>
+        </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>
