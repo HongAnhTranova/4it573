@@ -39,6 +39,17 @@ async function sendTodoDetail(id) {
   }
 }
 
+const alertDeletedDetail = (id) => {
+  var data = JSON.stringify({ deleted: true });
+  if (detailClients.has(id)) {
+    for (var ws of detailClients.get(id)) {
+      if (ws.readyState === 1) {
+        ws.send(data);
+      }
+    }
+  }
+}
+
 app.ws("/ws/todos", function (ws, req) {
   listClients.add(ws);
   ws.on("close", function () {
@@ -91,8 +102,11 @@ app.post("/todo/:id/toggle", async function (req, res) {
 });
 
 app.post("/todo/:id/delete", async function (req, res) {
+  alertDeletedDetail(req.params.id);
+
   await knex("todos").where({ id: req.params.id }).del();
   await sendTodoList();
+
   res.redirect("/");
 });
 
