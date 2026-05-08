@@ -1,0 +1,17 @@
+{
+  "name": "hw-06",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ws": "^5.0.2",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
