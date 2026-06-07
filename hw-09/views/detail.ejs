@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detail: <%= todo.title %></title>
+  </head>
+  <body>
+    <p><a href="/">&larr; Zpet na seznam</a></p>
+
+    <h1 id="todo-title"><%= todo.title %></h1>
+    <p>Stav: <strong id="todo-status"><%= todo.done ? "Hotovo" : "Nehotovo" %></strong></p>
+    <p>Priorita: <strong id="todo-priority"><%= todo.priority %></strong></p>
+
+    <form action="/todo/<%= todo.id %>/toggle" method="POST" style="display:inline">
+      <button id="todo-toggle" type="submit">
+        <%= todo.done ? "Oznacit jako nehotove" : "Oznacit jako hotove" %>
+      </button>
+    </form>
+
+    <form action="/todo/<%= todo.id %>/delete" method="POST" style="display:inline">
+      <button type="submit">Smazat</button>
+    </form>
+
+    <h2>Upravit</h2>
+    <form action="/todo/<%= todo.id %>/edit" method="POST">
+      <label>
+        Nazev:
+        <input id="todo-title-input" type="text" name="title" value="<%= todo.title %>" required />
+      </label>
+      <br />
+      <label>
+        Priorita:
+        <select id="todo-priority-select" name="priority">
+          <% priorities.forEach(function (p) { %>
+            <option value="<%= p %>" <%= todo.priority === p ? "selected" : "" %>>
+              <%= p %>
+            </option>
+          <% }); %>
+        </select>
+      </label>
+      <br />
+      <button type="submit">Ulozit</button>
+    </form>
+    <script>
+      var ws = new WebSocket("ws://" + window.location.host + "/ws/todo/<%= todo.id %>");
+      ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        if (data.deleted) {
+          document.body.innerHTML = '<h1>Toto todo bylo smazano.</h1><p><a href="/">&larr; Zpet na seznam</a></p>';
+          return;
+        }
+        document.getElementById("todo-title").textContent = data.title;
+        document.getElementById("todo-status").textContent = data.done ? "Hotovo" : "Nehotovo";
+        document.getElementById("todo-priority").textContent = data.priority;
+        document.getElementById("todo-toggle").textContent = data.done ? "Oznacit jako nehotove" : "Oznacit jako hotove";
+        document.getElementById("todo-title-input").value = data.title;
+        document.getElementById("todo-priority-select").value = data.priority;
+      };
+    </script>
+  </body>
+</html>

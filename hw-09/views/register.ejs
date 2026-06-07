@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registrace</title>
+  </head>
+  <body>
+    <h1>Registrace</h1>
+
+    <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+    <% } %>
+
+    <form action="/register" method="POST">
+      <label>
+        Uzivatelske jmeno:
+        <input type="text" name="username" required />
+      </label>
+      <br />
+      <label>
+        Heslo:
+        <input type="password" name="password" required />
+      </label>
+      <br />
+      <button type="submit">Registrovat</button>
+    </form>
+
+    <p><a href="/login">Mam ucet - prihlasit</a></p>
+    <p><a href="/">&larr; Zpet na seznam</a></p>
+  </body>
+</html>
